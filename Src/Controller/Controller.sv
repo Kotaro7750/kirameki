@@ -8,6 +8,7 @@ module Controller(
 );
 
   logic isDataHazard;
+  logic isStructureHazard;
   logic isBranchHazard;
   logic isBranchHazardDelayed;
   logic isMiss;
@@ -55,10 +56,12 @@ module Controller(
     .isBranchHazard(isBranchHazard),
     .isBranchHazardDelayed(isBranchHazardDelayed),
     .isDataHazard(isDataHazard),
+    .isStructureHazard(isStructureHazard),
     .isMiss(isMiss),
     .fetchStage(port.fetchStage),
     .decodeStage(port.decodeStage),
-    .executeStage(port.executeStage)
+    .executeStage(port.executeStage),
+    .mulDivClear(port.mulDivClear)
   );
 
   always_ff@(posedge port.clk) begin
@@ -71,6 +74,7 @@ module Controller(
   end
 
   always_comb begin
+    isStructureHazard = execute.isMulDivUnitBusy;
     port.irregPc = irregPc;
     port.bypassedRs1 = bypassedRs1;
     port.bypassedRs2 = bypassedRs2;

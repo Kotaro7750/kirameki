@@ -14,6 +14,7 @@ interface ControllerIF(
   StageCtrl decodeStage;
   StageCtrl executeStage;
   StageCtrl memoryAccessStage;
+  logic mulDivClear;
   BasicData bypassedRs1;
   BasicData bypassedRs2;
 
@@ -27,6 +28,7 @@ interface ControllerIF(
     output fetchStageVirtual,
     output decodeStage,
     output executeStage,
+    output mulDivClear,
     output memoryAccessStage
   );
 
@@ -41,7 +43,7 @@ interface ControllerIF(
   );
 
   modport ExecuteStage(
-    input decodeStage,
+    input mulDivClear,
     input executeStage,
     input bypassedRs1,
     input bypassedRs2

@@ -6,10 +6,12 @@ module StageController(
   input var logic isBranchHazard,
   input var logic isBranchHazardDelayed,
   input var logic isDataHazard,
+  input var logic isStructureHazard,
   input var logic isMiss,
   output var StageCtrl fetchStage,
   output var StageCtrl decodeStage,
-  output var StageCtrl executeStage
+  output var StageCtrl executeStage,
+  output var logic mulDivClear
 );
   always_comb begin
     if (isMiss) begin
@@ -25,7 +27,19 @@ module StageController(
       executeStage.flush = TRUE;
   `endif
       executeStage.stall = FALSE;
+      mulDivClear = TRUE;
 
+    end
+    else if (isStructureHazard) begin
+      fetchStage.stall = TRUE;
+      fetchStage.flush = FALSE;
+
+      decodeStage.stall = TRUE;
+      decodeStage.flush = FALSE;
+
+      executeStage.stall = TRUE;
+      executeStage.flush = TRUE;
+      mulDivClear = FALSE;
     end
     else if (isDataHazard) begin
       fetchStage.stall = TRUE;
@@ -36,6 +50,7 @@ module StageController(
 
       executeStage.stall = FALSE;
       executeStage.flush = FALSE;
+      mulDivClear = FALSE;
     end
     else if (isBranchHazard || isBranchHazardDelayed) begin
       if (isBranchHazard && !isBranchHazardDelayed) begin
@@ -56,6 +71,7 @@ module StageController(
 
       executeStage.stall = FALSE;
       executeStage.flush = FALSE;
+      mulDivClear = FALSE;
     end
     else begin
       fetchStage.stall = FALSE;
@@ -66,6 +82,7 @@ module StageController(
 
       executeStage.stall = FALSE;
       executeStage.flush = FALSE;
+      mulDivClear = FALSE;
     end
   end
 endmodule

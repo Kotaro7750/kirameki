@@ -47,11 +47,26 @@ module ExecuteStage(
     .isBranchTaken(isBranchTaken)
   );
 
+  MultiStageMulDiv MultiStageMulDiv(
+    .clk(port.clk),
+    .rst(port.rst),
+  `ifdef BRANCH_M
+    .clear(controller.mulDivClear),
+  `endif
+    .isMulDiv(prev.nextStage.opInfo.isMulDiv),
+    .mulDivCode(prev.nextStage.opInfo.mulDivCode),
+    .op1(aluOp1),
+    .op2(aluOp2),
+    .isMulDivUnitBusy(port.isMulDivUnitBusy),
+    .result(mulDivResult)
+  );
+
   BasicData aluOp1;
   BasicData aluOp2;
   BasicData irregPcOp1;
   BasicData irregPcOp2;
   BasicData aluResult;
+  BasicData mulDivResult;
   BasicData bypassedRs1;
   BasicData bypassedRs2;
   PC irregPc;
@@ -86,7 +101,7 @@ module ExecuteStage(
     nextStage.rdCtrl.wEnable = pipeReg.opInfo.wEnable;
     nextStage.rdCtrl.rdAddr = pipeReg.rdAddr;
     nextStage.rdCtrl.isForwardable = pipeReg.opInfo.isForwardable;
-    nextStage.rdCtrl.wData = aluResult;
+    nextStage.rdCtrl.wData = pipeReg.opInfo.isMulDiv ? mulDivResult : aluResult;
   `ifdef BRANCH_M
     nextStage.isBranch = pipeReg.opInfo.isBranch;
     nextStage.isBranchTaken = isBranchTaken;

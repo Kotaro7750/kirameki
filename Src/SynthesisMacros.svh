@@ -2,8 +2,8 @@
 
 //`define DEBUG
 
-//`define BRANCH_M //条件分岐確定ステージ
+`define BRANCH_M //条件分岐確定ステージ
 
-//`define BPRED_STATIC //静的分岐予測
+`define BPRED_STATIC //静的分岐予測
 
-//`define NOT_USE_BTB //BTB使うのか
+`define NOT_USE_BTB //BTB使うのか
