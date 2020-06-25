@@ -20,7 +20,7 @@ module NextPcGen(
       npc = irregPc;
     end
   `ifndef NOT_USE_BTB
-    else if (isBranch && btbHit) begin
+    else if (isBranch && btbHit && isBranchTakenPredicted) begin
       npc = btbPredictedPc;
     end
   `endif
