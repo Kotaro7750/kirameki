@@ -42,13 +42,13 @@ module FetchStage(
     .npc(npc)
   );
 
-BranchPredictGen BranchPredictGen(
-  .isBranch(isBranch),
-  .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
-  .btbHit(port.btbHit),
-  .btbPredictedPc(port.btbPredictedPc),
-  .branchPredict(nextStage.branchPredict)
-);
+  BranchPredictGen BranchPredictGen(
+    .isBranch(isBranch),
+    .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
+    .btbHit(port.btbHit),
+    .btbPredictedPc(port.btbPredictedPc),
+    .branchPredict(nextStage.branchPredict)
+  );
 
 
   always_ff@(posedge port.clk) begin

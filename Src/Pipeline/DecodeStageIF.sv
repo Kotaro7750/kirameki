@@ -5,7 +5,6 @@ interface DecodeStageIF(
   input var logic rst
 );
 
-  logic stall;
   ALUOpType aluOp1Type;
   ALUOpType aluOp2Type;
   logic isStore;
@@ -14,7 +13,6 @@ interface DecodeStageIF(
   modport ThisStage(
     input clk,
     input rst,
-    output stall,
     output aluOp1Type,
     output aluOp2Type,
     output isStore,
@@ -22,7 +20,6 @@ interface DecodeStageIF(
   );
 
   modport NextStage(
-    input stall,
     input nextStage
   );
 

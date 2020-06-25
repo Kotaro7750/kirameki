@@ -1,3 +1,4 @@
+`include "../SynthesisMacros.svh"
 import BasicTypes::*;
 import FetchUnitTypes::*;
 
@@ -11,6 +12,7 @@ module BranchPredictGen(
   always_comb begin
     if (isBranch) begin
       if (isBranchTakenPredicted) begin
+      `ifndef NOT_USE_BTB
         if (btbHit) begin
           branchPredict.isNextPcPredicted = TRUE;
           branchPredict.predictedNextPC = btbPredictedPc;
@@ -21,6 +23,11 @@ module BranchPredictGen(
           branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
           branchPredict.isBranchTakenPredicted = TRUE;
         end
+      `else
+        branchPredict.isNextPcPredicted = FALSE;
+        branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
+        branchPredict.isBranchTakenPredicted = TRUE;
+      `endif
       end
       else begin
         branchPredict.isNextPcPredicted = TRUE;

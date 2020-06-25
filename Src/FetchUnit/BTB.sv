@@ -28,7 +28,6 @@ module BTB(
   BTBIndex rBtbIndex;
 
   always_ff@(posedge clk) begin
-    //requestedPcFF <= requestedPc;
     requestedPcFF <= irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : fetchStage.pc;
   end
 
@@ -37,12 +36,10 @@ module BTB(
     pc = execute.pc;
     isBranch = execute.isBranch;
     isBranchTaken = execute.isBranchTaken;
-    //irregPc = execute.irregPc;
   `else
     pc = memoryAccess.pc;
     isBranch = memoryAccess.isBranch;
     isBranchTaken = memoryAccess.isBranchTaken;
-    //irregPc = memoryAccess.irregPc;
   `endif
     irregPc = controller.irregPc;
   end

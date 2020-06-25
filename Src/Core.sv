@@ -66,11 +66,6 @@ module Core(
   FetchStage FetchStage(
     .port(fetchStageIF),
     .controller(controllerIF),
-  //`ifndef BRANCH_M
-  //  .branchConfirmedStage(executeStageIF),
-  //`else
-  //  .branchConfirmedStage(memoryAccessStageIF),
-  //`endif
     .branchPredictor(branchPredictorIF)
   );
   

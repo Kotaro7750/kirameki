@@ -1,3 +1,4 @@
+`include "../SynthesisMacros.svh"
 import BasicTypes::*;
 import FetchUnitTypes::*;
 
@@ -18,9 +19,11 @@ module NextPcGen(
     else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
       npc = irregPc;
     end
+  `ifndef NOT_USE_BTB
     else if (isBranch && btbHit) begin
       npc = btbPredictedPc;
     end
+  `endif
     else begin
       npc = pc + 4;
     end

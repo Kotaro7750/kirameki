@@ -54,7 +54,6 @@ module DecodeStage(
     nextStage.opInfo = opInfo;
     nextStage.branchPredict = pipeReg.branchPredict;
 
-    port.stall = stall;
     port.aluOp1Type = opInfo.aluCtrl.aluOp1Type;
     port.aluOp2Type = opInfo.aluCtrl.aluOp2Type;
     port.isStore = opInfo.isStore;

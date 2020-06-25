@@ -62,9 +62,6 @@ module Controller(
   );
 
   always_ff@(posedge port.clk) begin
-    //if (!isDataHazard) begin //データハザードのストールがあるとその分が考慮されず、1サイクル目がDステージに入らない。
-    //  isBranchHazardDelayed <= isBranchHazard;
-    //end
     if (isMiss) begin
       isBranchHazardDelayed <= FALSE;
     end

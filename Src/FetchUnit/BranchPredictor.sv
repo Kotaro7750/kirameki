@@ -53,20 +53,20 @@ module BranchPredictor(
   end
 
   always_comb begin
-    //port.isBranchTakenPredicted = FALSE;
-    case (State)
-      2'b00: begin
-        port.isBranchTakenPredicted = FALSE;
-      end
-      2'b01: begin
-        port.isBranchTakenPredicted = FALSE;
-      end
-      2'b10: begin
-        port.isBranchTakenPredicted = TRUE;
-      end
-      2'b11: begin
-        port.isBranchTakenPredicted = TRUE;
-      end
-    endcase
+    port.isBranchTakenPredicted = FALSE;
+    //case (State)
+    //  2'b00: begin
+    //    port.isBranchTakenPredicted = FALSE;
+    //  end
+    //  2'b01: begin
+    //    port.isBranchTakenPredicted = FALSE;
+    //  end
+    //  2'b10: begin
+    //    port.isBranchTakenPredicted = TRUE;
+    //  end
+    //  2'b11: begin
+    //    port.isBranchTakenPredicted = TRUE;
+    //  end
+    //endcase
   end
 endmodule

@@ -17,7 +17,7 @@ module MemoryAccessStage(
   
   MemAddr line;
   logic [1:0] offset;
-  logic [1:0] offsetFF;
+  logic [1:0] offsetReg;
   BasicData shiftedWData;
   logic [3:0] wEnable;
   BasicData rData;
@@ -29,15 +29,15 @@ module MemoryAccessStage(
   always_ff@(posedge port.clk) begin
     if (port.rst == RESET) begin
       pipeReg <= {($bits(MemoryAccessStagePipeReg)){1'b0}};
-      offsetFF <= 2'b0;
+      offsetReg <= 2'b0;
     end
     else if (stall) begin
       pipeReg <= pipeReg;
-      offsetFF <= offsetFF;
+      offsetReg <= offsetReg;
     end
     else begin
       pipeReg <= prev.nextStage;
-      offsetFF <= offset;
+      offsetReg <= offset;
     end
   end
 
@@ -81,7 +81,7 @@ module MemoryAccessStage(
       nextStage.rdCtrl.wEnable = pipeReg.rdCtrl.wEnable;
       nextStage.rdCtrl.rdAddr = pipeReg.rdCtrl.rdAddr;
       nextStage.rdCtrl.isForwardable = TRUE;
-      nextStage.rdCtrl.wData = rDataGen(rData,pipeReg.memCtrl.memAccessWidth,pipeReg.memCtrl.isLoad,pipeReg.memCtrl.isLoadUnsigned,offsetFF,hcAccess,hcOut);
+      nextStage.rdCtrl.wData = rDataGen(rData,pipeReg.memCtrl.memAccessWidth,pipeReg.memCtrl.isLoad,pipeReg.memCtrl.isLoadUnsigned,offsetReg,hcAccess,hcOut);
     end
     else begin
       nextStage.rdCtrl = pipeReg.rdCtrl;

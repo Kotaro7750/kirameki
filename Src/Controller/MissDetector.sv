@@ -3,8 +3,6 @@ import FetchUnitTypes::*;
 
 module MissDetector(
   input var logic isBranchTaken,
-  //input var logic isBranchTakenPredicted,
-  //input var PC predictedNextPC,
   input var BranchPredict branchPredict,
   input var PC irregPcFromConfirmedStage,
   output var PC irregPc,
@@ -12,14 +10,6 @@ module MissDetector(
 );
   
   always_comb begin
-    //if ((isBranchTaken != isBranchTakenPredicted) || (predictedNextPC != irregPc && isBranchTakenPredicted && isBranchTaken)) begin
-    //  irregPc = irregPcFromConfirmedStage;
-    //  isMiss = TRUE;
-    //end 
-    //else begin
-    //  irregPc = {(ADDR_WIDTH){1'b0}};
-    //  isMiss = FALSE;
-    //end
     if (branchPredict.isBranchTakenPredicted) begin
       if (branchPredict.isNextPcPredicted) begin
         if (branchPredict.predictedNextPC != irregPcFromConfirmedStage) begin
