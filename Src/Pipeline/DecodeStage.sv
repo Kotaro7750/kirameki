@@ -33,9 +33,7 @@ module DecodeStage(
   ExecuteStagePipeReg nextStage;
 
   always_ff@(posedge port.clk) begin
-    if (port.rst == RESET || flush || (controller.fetchStageVirtual.stall && !stall)) begin
-    //if (port.rst == RESET || flush || (prev.stall && !stall)) begin
-    //if (port.rst == RESET || flush || prev.stall) begin
+    if (port.rst == RESET) begin
       pipeReg <= {($bits(DecodeStagePipeReg)){1'b0}};
     end
     else if (stall) begin
@@ -60,6 +58,6 @@ module DecodeStage(
     port.aluOp1Type = opInfo.aluCtrl.aluOp1Type;
     port.aluOp2Type = opInfo.aluCtrl.aluOp2Type;
     port.isStore = opInfo.isStore;
-    port.nextStage = nextStage;
+    port.nextStage = flush ? {($bits(ExecuteStagePipeReg)){1'b0}} : nextStage;
   end
 endmodule

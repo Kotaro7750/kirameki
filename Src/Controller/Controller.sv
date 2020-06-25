@@ -33,14 +33,10 @@ module Controller(
   MissDetector MissDetector(
   `ifndef BRANCH_M
     .isBranchTaken(execute.isBranchTaken),
-    //.isBranchTakenPredicted(execute.branchPredict.isBranchTakenPredicted),
-    //.predictedNextPC(execute.branchPredict.predictedNextPC),
     .branchPredict(execute.branchPredict),
     .irregPcFromConfirmedStage(execute.irregPc),
   `else
     .isBranchTaken(memoryAccess.isBranchTaken),
-    //.isBranchTakenPredicted(memoryAccess.branchPredict.isBranchTakenPredicted),
-    //.predictedNextPC(memoryAccess.branchPredict.predictedNextPC),
     .branchPredict(memoryAccess.branchPredict),
     .irregPcFromConfirmedStage(memoryAccess.irregPc),
   `endif
@@ -61,10 +57,8 @@ module Controller(
     .isDataHazard(isDataHazard),
     .isMiss(isMiss),
     .fetchStage(port.fetchStage),
-    .fetchStageVirtual(port.fetchStageVirtual),
     .decodeStage(port.decodeStage),
-    .executeStage(port.executeStage),
-    .memoryAccessStage(port.memoryAccessStage)
+    .executeStage(port.executeStage)
   );
 
   always_ff@(posedge port.clk) begin

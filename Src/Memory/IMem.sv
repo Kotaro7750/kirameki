@@ -24,7 +24,7 @@ module IMem(
     addr = irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : pc;
   end
 
-  //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark/prog.hex",iMem);
+  //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/tests/LoadAndStore/code.hex",iMem);
   initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark_for_Synthesis/prog.hex",iMem);
 
 endmodule

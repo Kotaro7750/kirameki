@@ -8,64 +8,47 @@ module StageController(
   input var logic isDataHazard,
   input var logic isMiss,
   output var StageCtrl fetchStage,
-  output var StageCtrl fetchStageVirtual,
   output var StageCtrl decodeStage,
-  output var StageCtrl executeStage,
-  output var StageCtrl memoryAccessStage
+  output var StageCtrl executeStage
 );
   always_comb begin
     if (isMiss) begin
       fetchStage.stall = FALSE;
-      fetchStage.flush = FALSE;
-      fetchStageVirtual.stall = FALSE;
-      fetchStageVirtual.flush = FALSE;
+      fetchStage.flush = TRUE;
 
       decodeStage.stall = FALSE;
       decodeStage.flush = TRUE;
 
-      executeStage.stall = FALSE;
-      executeStage.flush = TRUE;
-
   `ifndef BRANCH_M
-    memoryAccessStage.stall = FALSE;
-    memoryAccessStage.flush = FALSE;
+      executeStage.flush = FALSE;
   `else
-    memoryAccessStage.stall = FALSE;
-    memoryAccessStage.flush = TRUE;
+      executeStage.flush = TRUE;
   `endif
+      executeStage.stall = FALSE;
+
     end
     else if (isDataHazard) begin
       fetchStage.stall = TRUE;
       fetchStage.flush = FALSE;
-      fetchStageVirtual.stall = TRUE;
-      fetchStageVirtual.flush = FALSE;
 
       decodeStage.stall = TRUE;
-      decodeStage.flush = FALSE;
+      decodeStage.flush = TRUE;
 
       executeStage.stall = FALSE;
-      executeStage.flush = TRUE;
-
-    memoryAccessStage.stall = FALSE;
-    memoryAccessStage.flush = FALSE;
+      executeStage.flush = FALSE;
     end
     else if (isBranchHazard || isBranchHazardDelayed) begin
-      if (isBranchHazard) begin
+      if (isBranchHazard && !isBranchHazardDelayed) begin
         fetchStage.stall = TRUE;
         fetchStage.flush = FALSE;
       end
+      else if (isBranchHazard && isBranchHazardDelayed ) begin
+        fetchStage.stall = TRUE;
+        fetchStage.flush = TRUE;
+      end
       else begin
         fetchStage.stall = FALSE;
-        fetchStage.flush = FALSE;
-      end
-
-      if (isBranchHazardDelayed) begin
-        fetchStageVirtual.stall = TRUE;
-        fetchStageVirtual.flush = FALSE;
-      end
-      else begin
-        fetchStageVirtual.stall = FALSE;
-        fetchStageVirtual.flush = FALSE;
+        fetchStage.flush = TRUE;
       end
 
       decodeStage.stall = FALSE;
@@ -73,24 +56,16 @@ module StageController(
 
       executeStage.stall = FALSE;
       executeStage.flush = FALSE;
-
-      memoryAccessStage.stall = FALSE;
-      memoryAccessStage.flush = FALSE;
     end
     else begin
       fetchStage.stall = FALSE;
       fetchStage.flush = FALSE;
-      fetchStageVirtual.stall = FALSE;
-      fetchStageVirtual.flush = FALSE;
 
       decodeStage.stall = FALSE;
       decodeStage.flush = FALSE;
 
       executeStage.stall = FALSE;
       executeStage.flush = FALSE;
-
-      memoryAccessStage.stall = FALSE;
-      memoryAccessStage.flush = FALSE;
     end
   end
 endmodule

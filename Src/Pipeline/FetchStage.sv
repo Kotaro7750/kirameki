@@ -3,11 +3,6 @@ import BasicTypes::*;
 module FetchStage(
   FetchStageIF.ThisStage port,
   ControllerIF.FetchStage controller,
-//`ifndef BRANCH_M
-//  ExecuteStageIF.FetchStage branchConfirmedStage,
-//`else
-//  MemoryAccessStageIF.FetchStage branchConfirmedStage,
-//`endif
   BranchPredictorIF.FetchStage branchPredictor
 );
 
@@ -36,15 +31,29 @@ module FetchStage(
     .instruction(instruction)
   );
 
+  NextPcGen NextPcGen(
+    .pc(pc),
+    .irregPc(irregPc),
+    .isBranch(isBranch),
+    .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
+    .stall(stall),
+    .btbHit(port.btbHit),
+    .btbPredictedPc(port.btbPredictedPc),
+    .npc(npc)
+  );
+
+BranchPredictGen BranchPredictGen(
+  .isBranch(isBranch),
+  .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
+  .btbHit(port.btbHit),
+  .btbPredictedPc(port.btbPredictedPc),
+  .branchPredict(nextStage.branchPredict)
+);
+
+
   always_ff@(posedge port.clk) begin
-    if (port.rst == RESET || flush) begin
+    if (port.rst == RESET) begin
       pc <= {(ADDR_WIDTH){1'b0}};
-    end
-    else if (stall) begin
-      pc <= pc;
-    end
-    else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
-      pc <= irregPc;
     end
     else begin
       pc <= npc;
@@ -55,65 +64,16 @@ module FetchStage(
     irregPc = controller.irregPc;
     isBranch = checkIfBranch(instruction);
 
-    if (isBranch) begin
-      if (branchPredictor.isBranchTakenPredicted) begin
-        if (port.btbHit) begin
-          npc = port.btbPredictedPc;
-          nextStage.branchPredict.isNextPcPredicted = TRUE;
-          nextStage.branchPredict.predictedNextPC = port.btbPredictedPc;
-          nextStage.branchPredict.isBranchTakenPredicted = branchPredictor.isBranchTakenPredicted;
-        end
-        else begin
-          npc = pc + 4;
-          nextStage.branchPredict.isNextPcPredicted = FALSE;
-          nextStage.branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
-          nextStage.branchPredict.isBranchTakenPredicted = TRUE;
-        end
-      end
-      else begin
-        npc = pc + 4;
-        nextStage.branchPredict.isNextPcPredicted = TRUE;
-        nextStage.branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}}; //後でirregPcと比較するので0の方が都合がいい
-        nextStage.branchPredict.isBranchTakenPredicted = FALSE;
-      end
-    end
-    else begin
-      npc = pc + 4;
-      nextStage.branchPredict.isNextPcPredicted = FALSE;
-      nextStage.branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
-      nextStage.branchPredict.isBranchTakenPredicted = FALSE;
-    end
-    //if (branchPredictor.isBranchTakenPredicted && isBranch) begin
-    //  if (port.btbHit) begin
-    //    npc = port.btbPredictedPc;
-    //    nextStage.branchPredict.isNextPcPredicted = TRUE;
-    //    nextStage.branchPredict.predictedNextPC = port.btbPredictedPc;
-    //    nextStage.branchPredict.isBranchTakenPredicted = branchPredictor.isBranchTakenPredicted;
-    //  end
-    //  else begin
-    //    npc = pc + 4;
-    //    nextStage.branchPredict.isNextPcPredicted = FALSE;
-    //    nextStage.branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
-    //    nextStage.branchPredict.isBranchTakenPredicted = FALSE;
-    //  end
-    //end
-    //else begin
-    //  npc = pc + 4;
-    //  nextStage.branchPredict.isNextPcPredicted = FALSE;
-    //  nextStage.branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}};
-    //  nextStage.branchPredict.isBranchTakenPredicted = FALSE;
-    //end
 
     nextStage.pc = pc;
     nextStage.instruction = instruction;
 
-    //port.pc = npc;
-    port.pc = stall ? pc : npc;
+    port.pc = npc;
     port.stall = stall;
     port.isBranch = isBranch; //TODO とりあえずcontrollerに入れておけば次のサイクルでstallとかしてくれるようにする。
     port.branchPredict = nextStage.branchPredict;
 
-    port.nextStage = nextStage;
+    port.nextStage = flush ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
   end
   
   //ここで分岐命令かチェックする。

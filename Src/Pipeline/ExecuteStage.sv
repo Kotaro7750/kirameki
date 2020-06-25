@@ -61,8 +61,7 @@ module ExecuteStage(
   MemoryAccessStagePipeReg nextStage;
 
   always_ff@(posedge port.clk) begin
-    if (port.rst == RESET || flush || (prev.stall && !stall)) begin
-    //if (port.rst == RESET || flush) begin
+    if (port.rst == RESET) begin
       pipeReg <= {($bits(ExecuteStagePipeReg)){1'b0}};
     end
     else if (stall) begin
@@ -101,6 +100,6 @@ module ExecuteStage(
     port.isBranchTaken = isBranchTaken;
     port.branchPredict = pipeReg.branchPredict;
 
-    port.nextStage = nextStage;
+    port.nextStage = flush ? {($bits(MemoryAccessStagePipeReg)){1'b0}} : nextStage;
   end
 endmodule

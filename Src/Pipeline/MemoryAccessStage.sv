@@ -27,7 +27,7 @@ module MemoryAccessStage(
   WriteBackStagePipeReg nextStage;
 
   always_ff@(posedge port.clk) begin
-    if (port.rst == RESET || flush) begin
+    if (port.rst == RESET) begin
       pipeReg <= {($bits(MemoryAccessStagePipeReg)){1'b0}};
       offsetFF <= 2'b0;
     end
