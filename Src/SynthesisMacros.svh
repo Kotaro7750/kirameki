@@ -4,4 +4,4 @@
 
 //`define BRANCH_M //条件分岐確定ステージ
 
-`define NOT_USE_BTB //BTB使うのか
+//`define NOT_USE_BTB //BTB使うのか
