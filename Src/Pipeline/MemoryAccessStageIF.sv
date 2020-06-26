@@ -66,6 +66,11 @@ interface MemoryAccessStageIF(
     input irregPc
   );
 
+  modport BranchPredictor(
+    input isBranch,
+    input isBranchTaken
+  );
+
   modport BTB(
     input pc,
     input isBranch,
@@ -76,6 +81,12 @@ interface MemoryAccessStageIF(
 
 `ifdef DEBUG
   modport Debug(
+  `ifdef BRANCH_M
+    input irregPc,
+    input isBranch,
+    input isBranchTaken,
+    input branchPredict,
+  `endif
     input hcOut,
     input debugPc,
     input debugWEnable,

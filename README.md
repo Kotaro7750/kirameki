@@ -1,4 +1,4 @@
-# 煌 RISC-V準拠パイプラインプロセッサ
+# 煌 RISC-V32IM準拠パイプラインプロセッサ
 
 ## 特徴
 * RISC-V32IM(システム命令を除く)準拠
@@ -12,7 +12,7 @@ Coremark
 ```
 2K performance run parameters for coremark.
 CoreMark Size    : 666
-Total ticks      : 1461498188
+Total ticks      : 1406776196
 Total time (secs): 14
 Iterations/Sec   : 214
 Iterations       : 3000

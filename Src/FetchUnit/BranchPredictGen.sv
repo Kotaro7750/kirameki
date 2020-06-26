@@ -3,6 +3,7 @@ import BasicTypes::*;
 import FetchUnitTypes::*;
 
 module BranchPredictGen(
+  input var PC npc,
   input var logic isBranch,
   input var logic isBranchTakenPredicted,
   input var logic btbHit,
@@ -31,7 +32,7 @@ module BranchPredictGen(
       end
       else begin
         branchPredict.isNextPcPredicted = TRUE;
-        branchPredict.predictedNextPC = {(ADDR_WIDTH){1'b0}}; //後でirregPcと比較するので0の方が都合がいい
+        branchPredict.predictedNextPC = npc;
         branchPredict.isBranchTakenPredicted = FALSE;
       end
     end

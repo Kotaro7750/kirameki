@@ -10,7 +10,6 @@ interface ControllerIF(
 
   PC irregPc;
   StageCtrl fetchStage;
-  StageCtrl fetchStageVirtual;
   StageCtrl decodeStage;
   StageCtrl executeStage;
   StageCtrl memoryAccessStage;
@@ -25,7 +24,6 @@ interface ControllerIF(
     output bypassedRs1,
     output bypassedRs2,
     output fetchStage,
-    output fetchStageVirtual,
     output decodeStage,
     output executeStage,
     output mulDivClear,
@@ -38,7 +36,6 @@ interface ControllerIF(
   );
 
   modport DecodeStage(
-    input fetchStageVirtual,
     input decodeStage
   );
 

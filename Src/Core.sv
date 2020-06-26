@@ -26,6 +26,9 @@ module Core(
 
   Debug Debug(
     .port(debugIF),
+  `ifndef BRANCH_M
+    .executeStage(executeStageIF),
+  `endif
     .memoryAccessStage(memoryAccessStageIF),
     .writeBackStage(writeBackStageIF)
   );
@@ -33,7 +36,11 @@ module Core(
 
   BranchPredictor BranchPredictor(
     .port(branchPredictorIF),
-    .execute(executeStageIF)
+  `ifndef BRANCH_M
+    .branchConfirmedStage(executeStageIF)
+  `else
+    .branchConfirmedStage(memoryAccessStageIF)
+  `endif
   );
 
   logic [7:0] uart;

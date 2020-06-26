@@ -1,3 +1,4 @@
+`include "../SynthesisMacros.svh"
 import PipelineTypes::*;
 import FetchUnitTypes::*;
 
@@ -53,10 +54,21 @@ interface ExecuteStageIF(
     output bypassedRs2
   );
 
+`ifndef BRANCH_M
   modport BranchPredictor(
     input isBranch,
     input isBranchTaken
   );
+
+  `ifdef DEBUG
+    modport Debug(
+      input irregPc,
+      input isBranch,
+      input isBranchTaken,
+      input branchPredict
+    );
+  `endif
+`endif
 
   modport BTB(
     input pc,

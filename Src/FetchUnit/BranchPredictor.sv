@@ -1,9 +1,14 @@
+`include "../SynthesisMacros.svh"
 import BasicTypes::*;
 import PipelineTypes::*;
 
 module BranchPredictor(
   BranchPredictorIF.BranchPredictor port,
-  ExecuteStageIF.BranchPredictor execute
+`ifndef BRANCH_M
+  ExecuteStageIF.BranchPredictor branchConfirmedStage
+`else
+  MemoryAccessStageIF.BranchPredictor branchConfirmedStage
+`endif
 );
 
   logic [1:0] State;
@@ -12,10 +17,10 @@ module BranchPredictor(
     if (port.rst == RESET) begin
       State <= 2'b01;
     end
-    else if (execute.isBranch == TRUE) begin
+    else if (branchConfirmedStage.isBranch == TRUE) begin
       case (State)
         2'b00: begin
-          if (execute.isBranchTaken == TRUE) begin
+          if (branchConfirmedStage.isBranchTaken == TRUE) begin
             State <= 2'b01;
           end
           else begin
@@ -23,7 +28,7 @@ module BranchPredictor(
           end
         end
         2'b01: begin
-          if (execute.isBranchTaken == TRUE) begin
+          if (branchConfirmedStage.isBranchTaken == TRUE) begin
             State <= 2'b11;
           end
           else begin
@@ -32,7 +37,7 @@ module BranchPredictor(
           
         end
         2'b10: begin
-          if (execute.isBranchTaken == TRUE) begin
+          if (branchConfirmedStage.isBranchTaken == TRUE) begin
             State <= 2'b11;
           end
           else begin
@@ -41,7 +46,7 @@ module BranchPredictor(
           
         end
         2'b11: begin
-          if (execute.isBranchTaken == TRUE) begin
+          if (branchConfirmedStage.isBranchTaken == TRUE) begin
             State <= 2'b11;
           end
           else begin

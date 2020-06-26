@@ -4,8 +4,27 @@ import MemoryTypes::*;
 
 module Debug(
   DebugIF.ThisStage port,
+`ifndef BRANCH_M
+  ExecuteStageIF.Debug executeStage,
+`endif
   MemoryAccessStageIF.Debug memoryAccessStage,
   WriteBackStageIF.Debug writeBackStage
+);
+
+PredictStatistics PredictStatistics(
+  .clk(port.clk),
+  .rst(port.rst),
+`ifndef BRANCH_M
+  .irregPc(executeStage.irregPc),
+  .isBranch(executeStage.isBranch),
+  .isBranchTaken(executeStage.isBranchTaken),
+  .branchPredict(executeStage.branchPredict)
+`else
+  .irregPc(memoryAccessStage.irregPc),
+  .isBranch(memoryAccessStage.isBranch),
+  .isBranchTaken(memoryAccessStage.isBranchTaken),
+  .branchPredict(memoryAccessStage.branchPredict)
+`endif
 );
 
   PC wbPc;

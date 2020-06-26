@@ -43,6 +43,7 @@ module FetchStage(
   );
 
   BranchPredictGen BranchPredictGen(
+    .npc(npc),
     .isBranch(isBranch),
     .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
     .btbHit(port.btbHit),
