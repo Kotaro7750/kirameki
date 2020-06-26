@@ -69,7 +69,6 @@ module MemoryAccessStage(
     .rAddr(line),
     .wAddr(line),
     .wData(shiftedWData),
-    .rowAddr(prev.nextStage.memCtrl.addr),
     .rData(rData)
   );
 
@@ -97,6 +96,14 @@ module MemoryAccessStage(
     port.branchPredict = pipeReg.branchPredict;
   `endif
     port.nextStage = nextStage;
+
+  `ifdef DEBUG
+    port.debugPc = prev.nextStage.pc;
+    port.debugWEnable = wEnable;
+    port.debugAddr = prev.nextStage.memCtrl.addr;
+    port.debugWData = shiftedWData;
+    port.hcOut = hcOut;
+  `endif
   end
   
   function automatic [31:0] rDataGen;

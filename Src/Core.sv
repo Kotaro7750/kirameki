@@ -21,6 +21,16 @@ module Core(
 
   BypassNetworkIF bypassNetworkIF(sysclk,cpu_resetn);
 
+  `ifdef DEBUG
+  DebugIF debugIF(sysclk,cpu_resetn);
+
+  Debug Debug(
+    .port(debugIF),
+    .memoryAccessStage(memoryAccessStageIF),
+    .writeBackStage(writeBackStageIF)
+  );
+  `endif
+
   BranchPredictor BranchPredictor(
     .port(branchPredictorIF),
     .execute(executeStageIF)

@@ -68,7 +68,7 @@ module Controller(
     if (isMiss) begin
       isBranchHazardDelayed <= FALSE;
     end
-    else if (!isDataHazard) begin
+    else if (!isDataHazard && !isStructureHazard) begin
       isBranchHazardDelayed <= isBranchHazard;
     end
   end

@@ -14,6 +14,13 @@ interface MemoryAccessStageIF(
   logic isBranchTaken;
   BranchPredict branchPredict;
 `endif
+`ifdef DEBUG
+  PC debugPc;
+  MemAddr debugAddr;
+  BasicData debugWData;
+  logic [3:0] debugWEnable;
+  BasicData hcOut;
+`endif
   RDCtrl rdCtrl;
   WriteBackStagePipeReg nextStage;
 
@@ -30,6 +37,13 @@ interface MemoryAccessStageIF(
     output isBranch,
     output isBranchTaken,
     output branchPredict,
+  `endif
+  `ifdef DEBUG
+    output debugPc,
+    output debugAddr,
+    output debugWData,
+    output debugWEnable,
+    output hcOut,
   `endif
     output nextStage
   );
@@ -57,6 +71,16 @@ interface MemoryAccessStageIF(
     input isBranch,
     input isBranchTaken,
     input irregPc
+  );
+`endif
+
+`ifdef DEBUG
+  modport Debug(
+    input hcOut,
+    input debugPc,
+    input debugWEnable,
+    input debugAddr,
+    input debugWData
   );
 `endif
 

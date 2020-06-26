@@ -7,14 +7,12 @@ module DMem(
   input var MemAddr rAddr,
   input var MemAddr wAddr,
   input var BasicData wData,
-  input var MemAddr rowAddr, //TODO ラインとアドレスの区別もしたい
   output var BasicData rData
 );
   //TODO もっと大きく
   BasicData mem [0:32767]; //定数化
 
   always_ff @(posedge clk) begin
-      if (wEnable) $display("0x%4h: ", pc,"mem[0x%08h]",rowAddr," <- ","0x%h",wData); //TODO これどうにかしたい
       if(wEnable[0]) mem[wAddr][ 7: 0] <= wData[ 7: 0]; //TODO ここらへんの定数化
       if(wEnable[1]) mem[wAddr][15: 8] <= wData[15: 8];
       if(wEnable[2]) mem[wAddr][23:16] <= wData[23:16];
