@@ -8,6 +8,7 @@ module NextPcGen(
   input var logic isBranch,
   input var logic isBranchTakenPredicted,
   input var logic stall,
+  input var logic flush,
   input var logic btbHit,
   input var PC btbPredictedPc,
   output var PC npc
@@ -16,7 +17,8 @@ module NextPcGen(
     if (stall) begin
       npc = pc;
     end
-    else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
+    //else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
+    else if (irregPc != {(ADDR_WIDTH){1'b0}} && (flush || (pc != irregPc && !flush))) begin //たまたまpc==irregPcとなるとその命令が二回繰り返されてしまう
       npc = irregPc;
     end
   `ifndef NOT_USE_BTB

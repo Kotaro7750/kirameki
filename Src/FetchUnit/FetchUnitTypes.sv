@@ -3,6 +3,7 @@ package FetchUnitTypes;
 import BasicTypes::*;
   //Branch Prediction
   typedef struct packed {
+    logic [3:0]globalBranchHistory;
     logic isBranchTakenPredicted;
     logic isNextPcPredicted;
     PC predictedNextPC;

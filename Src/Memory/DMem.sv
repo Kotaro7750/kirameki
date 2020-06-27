@@ -21,5 +21,6 @@ module DMem(
   end
 
   //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/uart/data.hex",mem);
+  //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark_for_Synthesis_1iter/data.hex",mem);
   initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark_for_Synthesis/data.hex",mem);
 endmodule

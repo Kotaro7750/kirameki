@@ -5,12 +5,15 @@ import FetchUnitTypes::*;
 module BranchPredictGen(
   input var PC npc,
   input var logic isBranch,
+  input var logic [3:0]globalBranchHistory,
   input var logic isBranchTakenPredicted,
   input var logic btbHit,
   input var PC btbPredictedPc,
   output var BranchPredict branchPredict
 );
   always_comb begin
+    branchPredict.globalBranchHistory = globalBranchHistory;
+
     if (isBranch) begin
       if (isBranchTakenPredicted) begin
       `ifndef NOT_USE_BTB

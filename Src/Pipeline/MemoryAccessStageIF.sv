@@ -68,7 +68,8 @@ interface MemoryAccessStageIF(
 
   modport BranchPredictor(
     input isBranch,
-    input isBranchTaken
+    input isBranchTaken,
+    input branchPredict
   );
 
   modport BTB(

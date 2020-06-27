@@ -34,7 +34,8 @@ module Core(
   );
   `endif
 
-  BranchPredictor BranchPredictor(
+  //BranchPredictor BranchPredictor(
+  TwoLevelGlobal BranchPredictor (
     .port(branchPredictorIF),
   `ifndef BRANCH_M
     .branchConfirmedStage(executeStageIF)

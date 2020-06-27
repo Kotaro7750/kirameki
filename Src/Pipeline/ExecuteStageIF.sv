@@ -57,7 +57,8 @@ interface ExecuteStageIF(
 `ifndef BRANCH_M
   modport BranchPredictor(
     input isBranch,
-    input isBranchTaken
+    input isBranchTaken,
+    input branchPredict
   );
 
   `ifdef DEBUG

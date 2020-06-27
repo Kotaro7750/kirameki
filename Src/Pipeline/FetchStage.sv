@@ -27,7 +27,7 @@ module FetchStage(
     .rst(port.rst),
     .stall(stall),
     .pc(npc), //IMemの読みはクロック同期なので、内容的にはpcだが、記述としてはnpc。BTBも同様。
-    .irregPc(irregPc),
+    //.irregPc(irregPc),
     .instruction(instruction)
   );
 
@@ -37,6 +37,7 @@ module FetchStage(
     .isBranch(isBranch),
     .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
     .stall(stall),
+    .flush(flush),
     .btbHit(port.btbHit),
     .btbPredictedPc(port.btbPredictedPc),
     .npc(npc)
@@ -45,6 +46,7 @@ module FetchStage(
   BranchPredictGen BranchPredictGen(
     .npc(npc),
     .isBranch(isBranch),
+    .globalBranchHistory(branchPredictor.globalBranchHistory),
     .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
     .btbHit(port.btbHit),
     .btbPredictedPc(port.btbPredictedPc),
@@ -74,7 +76,8 @@ module FetchStage(
     port.isBranch = isBranch; //TODO とりあえずcontrollerに入れておけば次のサイクルでstallとかしてくれるようにする。
     port.branchPredict = nextStage.branchPredict;
 
-    port.nextStage = flush ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
+    //port.nextStage = flush ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
+    port.nextStage = (flush || (irregPc != {(ADDR_WIDTH){1'b0}} && irregPc != pc)) ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
   end
   
   //ここで分岐命令かチェックする。

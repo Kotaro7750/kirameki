@@ -5,7 +5,7 @@ module IMem(
   input var logic rst,
   input var logic stall,
   input var PC pc,
-  input var PC irregPc,
+  //input var PC irregPc,
   output var Instruction instruction
 );
   Instruction iMem [0:32767];
@@ -21,10 +21,12 @@ module IMem(
   end
 
   always_comb begin
-    addr = irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : pc;
+    //addr = irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : pc;
+    addr = pc;
   end
 
   //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/tests/LoadAndStore/code.hex",iMem);
+  //initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark_for_Synthesis_1iter/prog.hex",iMem);
   initial $readmemh("/home/koutarou/develop/kirameki/benchmarks/Coremark_for_Synthesis/prog.hex",iMem);
 
 endmodule
