@@ -1,3 +1,4 @@
+`include "../SynthesisMacros.svh"
 import BasicTypes::*;
 
 module FetchStage(
@@ -76,8 +77,11 @@ module FetchStage(
     port.isBranch = isBranch; //TODO とりあえずcontrollerに入れておけば次のサイクルでstallとかしてくれるようにする。
     port.branchPredict = nextStage.branchPredict;
 
-    //port.nextStage = flush ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
+  `ifdef BRANCH_M
+    port.nextStage = flush ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
+  `else
     port.nextStage = (flush || (irregPc != {(ADDR_WIDTH){1'b0}} && irregPc != pc)) ? {($bits(DecodeStagePipeReg)){1'b0}} : nextStage;
+  `endif
   end
   
   //ここで分岐命令かチェックする。

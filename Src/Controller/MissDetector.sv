@@ -1,7 +1,9 @@
+`include "../SynthesisMacros.svh"
 import BasicTypes::*;
 import FetchUnitTypes::*;
 
 module MissDetector(
+  input var logic isBranchHazardDelayed,
   input var logic isBranchTaken,
   input var BranchPredict branchPredict,
   input var PC irregPcFromConfirmedStage,
@@ -22,7 +24,11 @@ module MissDetector(
         end
       end
       else begin
+      `ifdef BRANCH_M //M確定のときはBハザード中の予測変更をミスとして扱う．
+        isMiss = isBranchHazardDelayed ? FALSE : TRUE;
+      `else
         isMiss = FALSE;
+      `endif
         irregPc = irregPcFromConfirmedStage;
       end
     end

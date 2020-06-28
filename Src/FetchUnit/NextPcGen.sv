@@ -17,8 +17,11 @@ module NextPcGen(
     if (stall) begin
       npc = pc;
     end
-    //else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
+  `ifdef BRANCH_M //M確定のときは予測変更はミスとする．
+    else if (irregPc != {(ADDR_WIDTH){1'b0}}) begin
+  `else
     else if (irregPc != {(ADDR_WIDTH){1'b0}} && (flush || (pc != irregPc && !flush))) begin //たまたまpc==irregPcとなるとその命令が二回繰り返されてしまう
+  `endif
       npc = irregPc;
     end
   `ifndef NOT_USE_BTB

@@ -32,6 +32,7 @@ module Controller(
   );
 
   MissDetector MissDetector(
+    .isBranchHazardDelayed(isBranchHazardDelayed),
   `ifndef BRANCH_M
     .isBranchTaken(execute.isBranchTaken),
     .branchPredict(execute.branchPredict),
