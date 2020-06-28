@@ -28,7 +28,7 @@ module BTB(
   BTBIndex rBtbIndex;
 
   always_ff@(posedge clk) begin
-    requestedPcFF <= irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : fetchStage.pc;
+    requestedPcFF <= irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : fetchStage.npc;
   end
 
   always_comb begin
@@ -60,7 +60,7 @@ module BTB(
   endgenerate
 
   always_comb begin
-    requestedPc = irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : fetchStage.pc;
+    requestedPc = irregPc != {(ADDR_WIDTH){1'b0}} ? irregPc : fetchStage.npc;
 
     if (isBranch && isBranchTaken) begin
       wEnable = TRUE;

@@ -47,7 +47,8 @@ module FetchStage(
   BranchPredictGen BranchPredictGen(
     .npc(npc),
     .isBranch(isBranch),
-    .globalBranchHistory(branchPredictor.globalBranchHistory),
+    //.globalBranchHistory(branchPredictor.globalBranchHistory),
+    .phtIndex(branchPredictor.phtIndex),
     .isBranchTakenPredicted(branchPredictor.isBranchTakenPredicted),
     .btbHit(port.btbHit),
     .btbPredictedPc(port.btbPredictedPc),
@@ -72,7 +73,8 @@ module FetchStage(
     nextStage.pc = pc;
     nextStage.instruction = instruction;
 
-    port.pc = npc;
+    port.pc = pc;
+    port.npc = npc;
     port.stall = stall;
     port.isBranch = isBranch; //TODO とりあえずcontrollerに入れておけば次のサイクルでstallとかしてくれるようにする。
     port.branchPredict = nextStage.branchPredict;

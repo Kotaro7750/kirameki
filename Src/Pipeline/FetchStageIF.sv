@@ -11,6 +11,7 @@ interface FetchStageIF(
   logic btbHit;
   logic stall;
   PC pc;
+  PC npc;
   PC btbPredictedPc;
   BranchPredict branchPredict;
   DecodeStagePipeReg nextStage;
@@ -21,6 +22,7 @@ interface FetchStageIF(
     input btbHit,
     input btbPredictedPc,
     output pc,
+    output npc,
     output stall,
     output isBranch,
     output branchPredict,
@@ -36,9 +38,13 @@ interface FetchStageIF(
     input branchPredict
   );
 
+  modport BranchPredictor(
+    input pc
+  );
+
 `ifndef NOT_USE_BTB
   modport BTB(
-    input pc,
+    input npc,
     input stall,
     output btbHit,
     output btbPredictedPc

@@ -1,5 +1,6 @@
 import BasicTypes::*;
 import PipelineTypes::*;
+import FetchUnitTypes::*;
 
 interface BranchPredictorIF(
   input var logic clk,
@@ -7,17 +8,20 @@ interface BranchPredictorIF(
 );
 
   logic isBranchTakenPredicted;
-  logic [3:0]globalBranchHistory;
+  //GlobalBranchHistory globalBranchHistory;
+  PHTIndex phtIndex;
   
   modport BranchPredictor(
     input clk,
     input rst,
-    output globalBranchHistory,
+    //output globalBranchHistory,
+    output phtIndex,
     output isBranchTakenPredicted
   );
 
   modport FetchStage(
-    input globalBranchHistory,
+    //input globalBranchHistory,
+    input phtIndex,
     input isBranchTakenPredicted
   );
 
